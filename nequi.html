@@ -40,16 +40,36 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* ---------- 2. clave ---------- */
 .box{top:209px;width:70px;height:70px;background:var(--lilac);border-radius:5px;display:flex;align-items:center;justify-content:center}
-.box.on::after{content:"";width:20px;height:20px;border-radius:50%;background:var(--ink)}
+.box.on::after{content:"*";color:var(--pink);font:800 62px/1 Manrope,sans-serif;margin-top:20px;animation:pop .18s ease-out}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
 #boxes.err{animation:shake .4s}
 @keyframes shake{25%{transform:translateX(-12px)}75%{transform:translateX(12px)}}
 .key{width:150px;height:80px;display:flex;align-items:center;justify-content:center;font-size:57px;font-weight:300;border-radius:14px}
 .key:active{background:rgba(255,255,255,.08)}
 .bad{color:#ff7ab8}
 
-/* ---------- carga ---------- */
-.spin{left:279px;top:600px;width:60px;height:60px;border-radius:50%;border:6px solid rgba(255,255,255,.18);border-top-color:var(--pink);animation:sp .8s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
+/* ---------- carga (animación del video) ---------- */
+#s-load{transition:none;background:#1f0020}
+#s-load .stage{background:transparent}
+#s-load.run{animation:lbg 2.4s linear forwards}
+@keyframes lbg{0%{background:#1f0020}14%{background:#fafafa}83%{background:#fafafa}100%{background:#1f0020}}
+.sq{position:absolute;left:288px;top:619px;width:42px;height:42px;border-radius:9px;background:#d5007e;opacity:0}
+#s-load.run .sqa{animation:sqa 2.4s ease-in-out forwards}
+#s-load.run .sqb{animation:sqb 2.4s ease-in-out forwards}
+@keyframes sqa{0%{opacity:0;transform:translate(17px,-17px) rotate(-30deg) scale(.1)}
+ 6%{opacity:1}14%{transform:translate(14px,-19px) rotate(-30deg) scale(1)}
+ 30%{transform:translate(0,0) rotate(15deg)}36%{transform:translate(0,0) rotate(45deg)}
+ 47%{transform:translate(0,0) rotate(90deg)}64%{transform:translate(0,0) rotate(90deg)}
+ 70%{transform:translate(17px,-17px) rotate(90deg)}79%{transform:translate(17px,-17px) rotate(95deg)}
+ 86%{transform:translate(8px,-21px) rotate(130deg)}93%{opacity:1;transform:translate(0,0) rotate(135deg) scale(1)}
+ 100%{opacity:0;transform:translate(0,0) rotate(150deg) scale(.1)}}
+@keyframes sqb{0%{opacity:0;transform:translate(-17px,17px) rotate(-30deg) scale(.1)}
+ 6%{opacity:1}14%{transform:translate(-14px,19px) rotate(-30deg) scale(1)}
+ 30%{transform:translate(0,0) rotate(15deg)}36%{transform:translate(0,0) rotate(45deg)}
+ 47%{transform:translate(0,0) rotate(90deg)}64%{transform:translate(0,0) rotate(90deg)}
+ 70%{transform:translate(-17px,17px) rotate(90deg)}79%{transform:translate(-17px,17px) rotate(95deg)}
+ 86%{transform:translate(-8px,21px) rotate(130deg)}93%{opacity:1;transform:translate(0,0) rotate(135deg) scale(1)}
+ 100%{opacity:0;transform:translate(0,0) rotate(150deg) scale(.1)}}
 
 /* ---------- 3. saldo ---------- */
 #st-home{background:#fff}
@@ -127,7 +147,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 </div></section>
 
 <!-- CARGA -->
-<section class="screen" id="s-load"><div class="stage w618"><div class="a spin"></div><div class="t c" style="left:309px;top:720px;font-size:22px;font-weight:500">Entrando a tu Nequi…</div></div></section>
+<section class="screen" id="s-load"><div class="stage w618"><div class="sq sqb"></div><div class="sq sqa"></div></div></section>
 
 <!-- SALDO (592x1280) -->
 <section class="screen" id="s-home"><div class="stage w592" id="st-home">
@@ -278,7 +298,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var b=$('boxes'),m=$('msg');b.classList.add('err');m.textContent='Clave incorrecta, intenta de nuevo';m.classList.add('bad');
       setTimeout(function(){b.classList.remove('err');pin='';paint()},450);return;
     }
-    show('s-load');setTimeout(openHome,1300);
+    var L=$('s-load');L.classList.remove('run');void L.offsetWidth;show('s-load');L.classList.add('run');setTimeout(function(){openHome();L.classList.remove('run')},2400);
   }
   pad.addEventListener('click',function(e){var b=e.target.closest('button');if(b&&b.dataset.k)press(b.dataset.k)});
   document.addEventListener('keydown',function(e){
