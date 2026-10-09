@@ -360,7 +360,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   function updateSafe(){
     var wp=['pg-mov','pg-serv','pg-bell'].some(function(i){return document.getElementById(i).classList.contains('show')});
     document.getElementById('s-home').classList.toggle('wp',wp);
-    var hc=document.documentElement.classList;hc.remove('hm','wh');if(current==='s-video')hc.add('wh');else if(current==='s-home')hc.add(wp?'wh':'hm');
+    var hc=document.documentElement.classList;hc.remove('hm','wh');if(current==='s-video')hc.add('wh');else if(current==='s-home')hc.add('wh');   /* saldo: sin morado de fondo fuera del contenido */
     var white=current==='s-video'||(current==='s-home'&&wp),tc=document.getElementById('themecolor');
     /* En iPhone la franja inferior del sistema toma el theme-color: debe ser el color de lo que hay justo arriba de ella */
     var ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
