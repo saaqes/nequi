@@ -331,12 +331,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   /* Diseño fluido: 1 px de CSS = 1,5 px de diseño en pantallas grandes; en celulares se ajusta al ancho.
      El contenido se estira a lo ancho (hasta 1200 px de diseño) y los bloques inferiores quedan anclados abajo. */
   function fit(){
+    var isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
     var vv=window.visualViewport,vw=innerWidth,fh=Math.round(vv?Math.min(vv.height,innerHeight):innerHeight),MAXW=1200,MINH=1000;
     var cs=getComputedStyle(document.getElementById('probe')),sat=parseFloat(cs.paddingTop)||0,sab=parseFloat(cs.paddingBottom)||0,vh=Math.max(fh-sat,300);   /* abajo no se reserva espacio: el contenido llega hasta el borde */
     document.querySelectorAll('.screen').forEach(function(sc){sc.style.height='';sc.style.bottom='0'});
     document.querySelectorAll('.stage').forEach(function(st){
       var B=st.classList.contains('w618')?618:592;
-      var s=Math.min(vw<=500?vw/B:2/3,vh/MINH),W=Math.min(vw/s,MAXW),H=vh/s;
+      var s=Math.min(vw<=500?vw/B:2/3,vh/MINH),W=Math.min(vw/s,MAXW),H=vh/s+(isIOS?22:0);   /* iPhone: baja la página 22 px de diseño para que la barra quede pegada al borde inferior */
       st.style.width=W+'px';st.style.height=H+'px';
       st.style.setProperty('--W',W+'px');st.style.setProperty('--H',H+'px');
       st.style.transform='translate('+((vw-W*s)/2)+'px,'+sat+'px) scale('+s+')';
