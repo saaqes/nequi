@@ -87,7 +87,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .row .it img{display:block;pointer-events:none}
 .row .lb{position:absolute;white-space:nowrap;color:#3a223a;font-size:18px;font-weight:500;line-height:1}
 .sec{left:22px;font-size:19.5px;font-weight:500;color:#4a2f4a}
-.nav{left:22px;right:112px;bottom:22px;height:78px;display:flex;padding:6px;background:#fff;border-radius:10px;box-shadow:0 2px 14px rgba(31,0,32,.22)}
+.nav{left:calc(50% - 274px);width:458px;bottom:22px;height:78px;display:flex;padding:6px;background:#fff;border-radius:10px;box-shadow:0 2px 14px rgba(31,0,32,.22)}
 .tab{position:relative;flex:1;height:66px;border-radius:8px;color:var(--ink)}
 .tab.on{background:var(--lilac)}
 .tab svg{position:absolute;left:50%;top:6px;transform:translateX(-50%)}
@@ -127,7 +127,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .pg .bigbtn{position:absolute;left:28px;right:28px;height:56px;border-radius:8px;font-size:19px;font-weight:600}
 .wide .it5,.wide .lb5,.wide #bans>div+div{display:none}
 .tab svg.f,.tab.on svg.o{display:none}.tab.on svg.f{display:block}
-.pay{right:22px;bottom:22px;width:78px;height:78px;background:var(--pink);border-radius:8px;box-shadow:0 2px 14px rgba(31,0,32,.22)}
+.pay{left:calc(50% + 196px);bottom:22px;width:78px;height:78px;background:var(--pink);border-radius:8px;box-shadow:0 2px 14px rgba(31,0,32,.22)}
 .toast{box-shadow:0 2px 12px rgba(31,0,32,.25);position:fixed;left:50%;bottom:9%;transform:translate(-50%,20px);background:#fff;color:var(--ink);padding:12px 22px;border-radius:30px;font-weight:600;font-size:15px;opacity:0;transition:.3s;z-index:9;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 </style>
@@ -319,7 +319,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   /* Diseño fluido: 1 px de CSS = 1,5 px de diseño en pantallas grandes; en celulares se ajusta al ancho.
      El contenido se estira a lo ancho (hasta 1200 px de diseño) y los bloques inferiores quedan anclados abajo. */
   function fit(){
-    var vw=innerWidth,vh=innerHeight,MAXW=1200,MINH=1000;
+    var vv=window.visualViewport,vw=innerWidth,vh=Math.round(vv?Math.min(vv.height,innerHeight):innerHeight),MAXW=1200,MINH=1000;
+    document.querySelectorAll('.screen').forEach(function(sc){sc.style.height=vh+'px';sc.style.bottom='auto'});
     document.querySelectorAll('.stage').forEach(function(st){
       var B=st.classList.contains('w618')?618:592;
       var s=Math.min(vw<=500?vw/B:2/3,vh/MINH),W=Math.min(vw/s,MAXW),H=vh/s;
@@ -331,7 +332,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var sv=Math.min(vw<=500?vw/618:2/3,vh/1280),vb=document.getElementById('vbox');
     vb.style.width=618*sv+'px';vb.style.height=1280*sv+'px';
   }
-  addEventListener('resize',fit);fit();
+  addEventListener('resize',fit);if(window.visualViewport)visualViewport.addEventListener('resize',fit);fit();
 
   function show(id){
     document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('active',s.id===id)});
