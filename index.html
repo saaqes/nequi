@@ -20,8 +20,8 @@
 html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%;height:100%;overflow:hidden;font-family:Manrope,system-ui,sans-serif;color:#fff;background:var(--bg)}
 body.home{background:var(--bg)}
 /* Zonas seguras (hora / barra inferior): toman el color del contenido de al lado */
-#s-home{background:var(--bg)}
-#s-home.wp{background:#fff}   /* páginas totalmente blancas: las zonas seguras también van en blanco */
+#s-home{background:linear-gradient(var(--bg) 0 50%,#fff 50%)}   /* arriba morado (cabecera), abajo blanco (sin franja morada) */
+#s-home.wp{background:#fff}   /* Movimientos / Servicios / Notificaciones: arriba también blanco */
 #probe{position:fixed;left:0;top:0;visibility:hidden;pointer-events:none;padding-top:var(--sat-override,env(safe-area-inset-top,0px));padding-bottom:var(--sab-override,env(safe-area-inset-bottom,0px))}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .screen{position:fixed;inset:0;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
