@@ -3,7 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<meta name="theme-color" content="#1f0020">
+<meta name="theme-color" content="#ffffff" id="themecolor">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Nequi">
 <title>Nequi</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -13,6 +19,9 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%;height:100%;overflow:hidden;font-family:Manrope,system-ui,sans-serif;color:#fff;background:var(--bg)}
 body.home{background:var(--bg)}
+/* Zonas seguras (hora / barra inferior): toman el color del contenido de al lado */
+#s-home{background:linear-gradient(var(--bg) 0 50%,#fff 50%)}
+#probe{position:fixed;left:0;top:0;visibility:hidden;pointer-events:none;padding-top:var(--sat-override,env(safe-area-inset-top,0px));padding-bottom:var(--sab-override,env(safe-area-inset-bottom,0px))}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .screen{position:fixed;inset:0;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
 .screen.active{opacity:1;visibility:visible}
@@ -133,6 +142,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 </style>
 </head>
 <body>
+<div id="probe"></div>
 
 <!-- VIDEO -->
 <section class="screen active" id="s-video">
@@ -319,24 +329,27 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   /* Diseño fluido: 1 px de CSS = 1,5 px de diseño en pantallas grandes; en celulares se ajusta al ancho.
      El contenido se estira a lo ancho (hasta 1200 px de diseño) y los bloques inferiores quedan anclados abajo. */
   function fit(){
-    var vv=window.visualViewport,vw=innerWidth,vh=Math.round(vv?Math.min(vv.height,innerHeight):innerHeight),MAXW=1200,MINH=1000;
-    document.querySelectorAll('.screen').forEach(function(sc){sc.style.height=vh+'px';sc.style.bottom='auto'});
+    var vv=window.visualViewport,vw=innerWidth,fh=Math.round(vv?Math.min(vv.height,innerHeight):innerHeight),MAXW=1200,MINH=1000;
+    var cs=getComputedStyle(document.getElementById('probe')),sat=parseFloat(cs.paddingTop)||0,sab=parseFloat(cs.paddingBottom)||0,vh=Math.max(fh-sat-sab,300);
+    document.querySelectorAll('.screen').forEach(function(sc){sc.style.height=fh+'px';sc.style.bottom='auto'});
     document.querySelectorAll('.stage').forEach(function(st){
       var B=st.classList.contains('w618')?618:592;
       var s=Math.min(vw<=500?vw/B:2/3,vh/MINH),W=Math.min(vw/s,MAXW),H=vh/s;
       st.style.width=W+'px';st.style.height=H+'px';
       st.style.setProperty('--W',W+'px');st.style.setProperty('--H',H+'px');
-      st.style.transform='translate('+((vw-W*s)/2)+'px,0) scale('+s+')';
+      st.style.transform='translate('+((vw-W*s)/2)+'px,'+sat+'px) scale('+s+')';
       st.classList.toggle('wide',W>640);
     });
     var sv=Math.min(vw<=500?vw/618:2/3,vh/1280),vb=document.getElementById('vbox');
     vb.style.width=618*sv+'px';vb.style.height=1280*sv+'px';
   }
+  if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(function(){});
   addEventListener('resize',fit);if(window.visualViewport)visualViewport.addEventListener('resize',fit);fit();
 
   function show(id){
     document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('active',s.id===id)});
     current=id;document.body.classList.toggle('home',id==='s-home');
+    var tc=document.getElementById('themecolor');if(tc)tc.setAttribute('content',id==='s-video'?'#ffffff':'#1f0020');
   }
   var tt;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show')},1800)}
 
