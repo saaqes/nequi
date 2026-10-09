@@ -386,7 +386,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   /* ---- escala: cada pantalla mantiene su tamaño de diseño y se ajusta al viewport ---- */
   /* Diseño fluido: 1 px de CSS = 1,5 px de diseño en pantallas grandes; en celulares se ajusta al ancho.
      El contenido se estira a lo ancho (hasta 1200 px de diseño) y los bloques inferiores quedan anclados abajo. */
+  var lastFitW=0;
   function fit(){
+    /* Con el teclado abierto solo cambia el alto: no se vuelve a escalar para que la página no se aleje */
+    var ae=document.activeElement;
+    if(ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA')&&lastFitW===innerWidth)return;
+    lastFitW=innerWidth;
     var vv=window.visualViewport,vw=innerWidth,vh=Math.round(vv?Math.min(vv.height,innerHeight):innerHeight),MAXW=1200,MINH=1000;
     document.querySelectorAll('.screen').forEach(function(sc){sc.style.height=vh+'px';sc.style.bottom='auto'});
     document.querySelectorAll('.stage').forEach(function(st){
@@ -400,6 +405,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var sv=Math.min(vw<=500?vw/618:2/3,vh/1280),vb=document.getElementById('vbox');
     vb.style.width=618*sv+'px';vb.style.height=1280*sv+'px';
   }
+  document.addEventListener('focusout',function(){setTimeout(fit,350)});
   addEventListener('resize',fit);if(window.visualViewport)visualViewport.addEventListener('resize',fit);fit();
 
   function show(id){
