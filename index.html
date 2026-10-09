@@ -3,13 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<meta name="theme-color" content="#ffffff" id="themecolor">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Nequi">
+<meta name="theme-color" content="#1f0020">
 <title>Nequi</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -17,18 +11,10 @@
    (618x1280 para logo y clave, 592x1280 para saldo) y se escalan juntas. */
 :root{--bg:#1f0020;--pink:#d5007e;--field:#4d334c;--lilac:#ebe7f6;--ink:#1f0020}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%;height:100%;overflow:hidden;font-family:Manrope,system-ui,sans-serif;color:#fff}
-/* El fondo del <html> pinta TODA la pantalla del teléfono (incluida la franja inferior del PWA), por eso cambia con la página */
-html{background:var(--bg)}
-html.hm{background:#fff linear-gradient(var(--bg),var(--bg)) no-repeat 0 0/100% 50%}
-html.wh{background:#fff}
-html.ld{animation:lbg 2.4s linear forwards}
-/* Zonas seguras (hora / barra inferior): toman el color del contenido de al lado */
-#s-home{background:linear-gradient(var(--bg) 0 50%,#fff 50%)}   /* arriba morado (cabecera), abajo blanco (sin franja morada) */
-#s-home.wp{background:#fff}   /* Movimientos / Servicios / Notificaciones: arriba también blanco */
-#probe{position:fixed;left:0;top:0;visibility:hidden;pointer-events:none;padding-top:var(--sat-override,env(safe-area-inset-top,0px));padding-bottom:var(--sab-override,env(safe-area-inset-bottom,0px))}
+html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%;height:100%;overflow:hidden;font-family:Manrope,system-ui,sans-serif;color:#fff;background:var(--bg)}
+body.home{background:var(--bg)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-.screen{position:fixed;left:0;top:0;right:0;bottom:0;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+.screen{position:fixed;inset:0;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
 .screen.active{opacity:1;visibility:visible}
 .stage{position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden;background:var(--bg)}
 .w618{width:618px}.w592{width:592px}
@@ -147,7 +133,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 </style>
 </head>
 <body>
-<div id="probe"></div>
 
 <!-- VIDEO -->
 <section class="screen active" id="s-video">
@@ -334,38 +319,24 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   /* Diseño fluido: 1 px de CSS = 1,5 px de diseño en pantallas grandes; en celulares se ajusta al ancho.
      El contenido se estira a lo ancho (hasta 1200 px de diseño) y los bloques inferiores quedan anclados abajo. */
   function fit(){
-    var vv=window.visualViewport,vw=innerWidth,fh=Math.round(vv?Math.min(vv.height,innerHeight):innerHeight),MAXW=1200,MINH=1000;
-    var cs=getComputedStyle(document.getElementById('probe')),sat=parseFloat(cs.paddingTop)||0,sab=parseFloat(cs.paddingBottom)||0,vh=Math.max(fh-sat,300);   /* abajo no se reserva espacio: el contenido llega hasta el borde */
-    document.querySelectorAll('.screen').forEach(function(sc){sc.style.height='';sc.style.bottom='0'});
+    var vv=window.visualViewport,vw=innerWidth,vh=Math.round(vv?Math.min(vv.height,innerHeight):innerHeight),MAXW=1200,MINH=1000;
+    document.querySelectorAll('.screen').forEach(function(sc){sc.style.height=vh+'px';sc.style.bottom='auto'});
     document.querySelectorAll('.stage').forEach(function(st){
       var B=st.classList.contains('w618')?618:592;
       var s=Math.min(vw<=500?vw/B:2/3,vh/MINH),W=Math.min(vw/s,MAXW),H=vh/s;
       st.style.width=W+'px';st.style.height=H+'px';
       st.style.setProperty('--W',W+'px');st.style.setProperty('--H',H+'px');
-      st.style.transform='translate('+((vw-W*s)/2)+'px,'+sat+'px) scale('+s+')';
+      st.style.transform='translate('+((vw-W*s)/2)+'px,0) scale('+s+')';
       st.classList.toggle('wide',W>640);
     });
     var sv=Math.min(vw<=500?vw/618:2/3,vh/1280),vb=document.getElementById('vbox');
     vb.style.width=618*sv+'px';vb.style.height=1280*sv+'px';
   }
-  if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(function(){});
   addEventListener('resize',fit);if(window.visualViewport)visualViewport.addEventListener('resize',fit);fit();
 
   function show(id){
     document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('active',s.id===id)});
     current=id;document.body.classList.toggle('home',id==='s-home');
-    updateSafe();
-  }
-  /* Color de las zonas fuera de límites (hora / barra inferior): morado, salvo páginas totalmente blancas */
-  function updateSafe(){
-    var wp=['pg-mov','pg-serv','pg-bell'].some(function(i){return document.getElementById(i).classList.contains('show')});
-    document.getElementById('s-home').classList.toggle('wp',wp);
-    var hc=document.documentElement.classList;hc.remove('hm','wh');if(current==='s-video')hc.add('wh');else if(current==='s-home')hc.add('wh');   /* saldo: sin morado de fondo fuera del contenido */
-    var white=current==='s-video'||(current==='s-home'&&wp),tc=document.getElementById('themecolor');
-    /* En iPhone la franja inferior del sistema toma el theme-color: debe ser el color de lo que hay justo arriba de ella */
-    var ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-    if(ios)white=current==='s-video'||current==='s-home';
-    if(tc)tc.setAttribute('content',white?'#ffffff':'#1f0020');
   }
   var tt;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show')},1800)}
 
@@ -418,7 +389,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var b=$('boxes'),m=$('msg');b.classList.add('err');m.textContent='Clave incorrecta, intenta de nuevo';m.classList.add('bad');
       setTimeout(function(){b.classList.remove('err');pin='';paint()},450);return;
     }
-    var L=$('s-load');L.classList.remove('run');void L.offsetWidth;show('s-load');L.classList.add('run');document.documentElement.classList.add('ld');setTimeout(function(){openHome();L.classList.remove('run');document.documentElement.classList.remove('ld')},2400);
+    var L=$('s-load');L.classList.remove('run');void L.offsetWidth;show('s-load');L.classList.add('run');setTimeout(function(){openHome();L.classList.remove('run')},2400);
   }
   pad.addEventListener('click',function(e){var b=e.target.closest('button');if(b&&b.dataset.k)press(b.dataset.k)});
   document.addEventListener('keydown',function(e){
@@ -449,8 +420,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var n=parseFloat(s);return isFinite(n)&&n>=0?Math.round(n*100)/100:NaN;
   }
   function closeEdit(){$('edit-form').style.display='none';$('no-notif').style.display='';$('opt-edit').style.display=''}
-  $('bell').onclick=function(){closeEdit();$('pg-bell').classList.add('show');updateSafe()};
-  $('bell-back').onclick=function(){$('pg-bell').classList.remove('show');updateSafe()};
+  $('bell').onclick=function(){closeEdit();$('pg-bell').classList.add('show')};
+  $('bell-back').onclick=function(){$('pg-bell').classList.remove('show')};
   $('opt-edit').onclick=function(){
     $('edit-form').style.display='';$('no-notif').style.display='none';$('opt-edit').style.display='none';
     $('in-bal').value=BALANCE?fmtIn(BALANCE):'';$('in-bal').focus();
@@ -460,7 +431,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var n=parseMoney($('in-bal').value);
     if(isNaN(n)){toast('Escribe un valor válido, por ejemplo 150.000');return}
     BALANCE=n;try{localStorage.setItem('nequi_balance',String(n))}catch(e){}
-    renderBal();closeEdit();$('pg-bell').classList.remove('show');updateSafe();toast('Saldo actualizado');
+    renderBal();closeEdit();$('pg-bell').classList.remove('show');toast('Saldo actualizado');
   }
   $('save-bal').onclick=saveBal;
   $('in-bal').addEventListener('keydown',function(e){if(e.key==='Enter')saveBal()});
@@ -473,7 +444,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     document.querySelectorAll('.tab').forEach(function(b){b.classList.toggle('on',b.dataset.tab===t)});
     $('home-view').style.display=t==='inicio'?'':'none';
     $('pg-mov').classList.toggle('show',t==='mov');$('pg-serv').classList.toggle('show',t==='serv');
-    $('body').scrollTop=0;updateSafe();
+    $('body').scrollTop=0;
   }
   /* Movimientos: pestañas Hoy / Más Movimientos y búsqueda */
   function filterMov(){
