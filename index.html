@@ -118,9 +118,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #bans::-webkit-scrollbar{display:none}
 #bans>div{flex:none;position:relative;height:215px;scroll-snap-align:start;border-radius:10px;overflow:hidden}
 #bans img{position:static}
+#pg-bell{z-index:5}
+.pg .field{position:absolute;left:28px;width:536px;height:60px;background:#fcf7fb;border:1.5px solid #e6dfe8;border-radius:8px}
+.pg .field input{position:absolute;left:20px;top:0;width:496px;height:57px;background:none;border:0;outline:0;font:600 26px Manrope,sans-serif;color:var(--ink)}
+.pg .bigbtn{position:absolute;left:28px;width:536px;height:56px;border-radius:8px;font-size:19px;font-weight:600}
 .tab svg.f,.tab.on svg.o{display:none}.tab.on svg.f{display:block}
 .pay{left:492px;top:1180px;width:78px;height:78px;background:var(--pink);border-radius:8px;box-shadow:0 2px 14px rgba(31,0,32,.22)}
-.toast{position:fixed;left:50%;bottom:9%;transform:translate(-50%,20px);background:#fff;color:var(--ink);padding:12px 22px;border-radius:30px;font-weight:600;font-size:15px;opacity:0;transition:.3s;z-index:9;pointer-events:none;white-space:nowrap}
+.toast{box-shadow:0 2px 12px rgba(31,0,32,.25);position:fixed;left:50%;bottom:9%;transform:translate(-50%,20px);background:#fff;color:var(--ink);padding:12px 22px;border-radius:30px;font-weight:600;font-size:15px;opacity:0;transition:.3s;z-index:9;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
@@ -275,6 +279,22 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <button class="a tab" data-tab="mov" style="left:178px;top:1186px"><svg class="f" width="30" height="30" viewBox="0 0 30 30"><path d="M8 3h14a2.5 2.5 0 0 1 2.5 2.5v14A2.5 2.5 0 0 1 22 22h-7l-5 4.5V22H8a2.5 2.5 0 0 1-2.5-2.5v-14A2.5 2.5 0 0 1 8 3z" fill="#1f0020"/><path d="M10.5 9.5h9M10.5 14.5h9" stroke="#ebe7f6" stroke-width="2" stroke-linecap="round"/></svg><svg class="o" width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#1f0020" stroke-width="2"><path d="M6 4h18v21l-3-1.6-3 1.6-3-1.6-3 1.6-3-1.6L6 25z" stroke-linejoin="round"/><path d="M11 11h8M11 16h8"/></svg><span>Movimientos</span></button>
   <button class="a tab" data-tab="serv" style="left:326px;top:1186px"><svg class="f" width="30" height="30" viewBox="0 0 30 30" fill="#1f0020"><rect x="4" y="4" width="9.5" height="9.5" rx="1.8"/><rect x="16.5" y="4" width="9.5" height="9.5" rx="1.8"/><rect x="4" y="16.5" width="9.5" height="9.5" rx="1.8"/><rect x="16.5" y="16.5" width="9.5" height="9.5" rx="1.8"/></svg><svg class="o" width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#1f0020" stroke-width="2"><rect x="4" y="4" width="9" height="9" rx="1.5"/><rect x="17" y="4" width="9" height="9" rx="1.5"/><rect x="4" y="17" width="9" height="9" rx="1.5"/><rect x="17" y="17" width="9" height="9" rx="1.5"/></svg><span>Servicios</span></button>
   <button class="a pay" id="payb" aria-label="Enviar plata"><span class="t c" style="left:50%;top:50%;font-size:42px;font-weight:300">$</span></button>
+
+  <!-- ============ CAMPANITA: notificaciones + editar saldo ============ -->
+  <div class="pg" id="pg-bell">
+    <div class="strip"></div>
+    <button class="a" id="bell-back" aria-label="Atrás" style="left:10px;top:76px;width:56px;height:50px"><svg class="a" style="left:11px;top:13px" width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#1f0020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M28 13H3M13 2L2 13l11 11"/></svg></button>
+    <div class="t m" style="left:70px;top:101px;font-size:24px;font-weight:600">Notificaciones</div>
+    <div class="a" style="left:0;top:140px;width:592px;height:2px;background:#ebebed"></div>
+    <button class="card" id="opt-edit" style="left:22px;top:170px;width:548px;height:84px"><span class="t m" style="left:24px;top:42px;font-size:22px;font-weight:500">Editar saldo</span><span class="t m" id="cur-bal" style="left:24px;top:66px;display:none"></span><svg class="a" style="left:500px;top:28px" width="16" height="28" viewBox="0 0 16 28" fill="none" stroke="#1f0020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l11 11L3 25"/></svg></button>
+    <div id="edit-form" style="display:none">
+      <div class="t m" style="left:28px;top:298px;font-size:19px;color:#6b636b !important">Escribe el nuevo saldo</div>
+      <div class="field" style="top:322px"><span class="t m" style="left:-18px;top:30px;font-size:26px;font-weight:600;display:none">$</span><input id="in-bal" inputmode="decimal" autocomplete="off" placeholder="$ 0,00"></div>
+      <button class="bigbtn" id="save-bal" style="top:410px;background:#d9007f;color:#fff">Guardar saldo</button>
+      <button class="bigbtn" id="cancel-bal" style="top:478px;border:1.5px solid #160010;color:#160010;background:#fff">Cancelar</button>
+    </div>
+    <div class="t c" id="no-notif" style="left:296px;top:330px;font-size:19px;color:#7a727a !important">No tienes notificaciones nuevas</div>
+  </div>
 </div></section>
 
 <div class="toast" id="toast"></div>
@@ -283,6 +303,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 (function(){
   var $=function(i){return document.getElementById(i)};
   var BALANCE=0;
+  try{var sv=parseFloat(localStorage.getItem('nequi_balance'));if(isFinite(sv)&&sv>=0)BALANCE=sv}catch(e){}
   var PIN=null;                 // "1234" para exigir una clave; null acepta cualquiera
   var current='s-video';
 
@@ -376,7 +397,30 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   function openHome(){hidden=false;renderBal();setTab('inicio');show('s-home')}
   $('eye').onclick=function(){hidden=!hidden;renderBal()};
   $('lock').onclick=function(){show('s-logo');startDyn()};
-  $('bell').onclick=function(){toast('No tienes notificaciones nuevas')};
+  /* Campanita: notificaciones + editar saldo */
+  function fmtIn(n){var m=money(n);return m.i+','+m.d}
+  function parseMoney(s){
+    s=String(s).replace(/[^\d.,]/g,'');if(!s)return NaN;
+    if(s.indexOf(',')>-1)s=s.replace(/\./g,'').replace(',','.');
+    else if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');
+    var n=parseFloat(s);return isFinite(n)&&n>=0?Math.round(n*100)/100:NaN;
+  }
+  function closeEdit(){$('edit-form').style.display='none';$('no-notif').style.display='';$('opt-edit').style.display=''}
+  $('bell').onclick=function(){closeEdit();$('pg-bell').classList.add('show')};
+  $('bell-back').onclick=function(){$('pg-bell').classList.remove('show')};
+  $('opt-edit').onclick=function(){
+    $('edit-form').style.display='';$('no-notif').style.display='none';$('opt-edit').style.display='none';
+    $('in-bal').value=BALANCE?fmtIn(BALANCE):'';$('in-bal').focus();
+  };
+  $('cancel-bal').onclick=closeEdit;
+  function saveBal(){
+    var n=parseMoney($('in-bal').value);
+    if(isNaN(n)){toast('Escribe un valor válido, por ejemplo 150.000');return}
+    BALANCE=n;try{localStorage.setItem('nequi_balance',String(n))}catch(e){}
+    renderBal();closeEdit();$('pg-bell').classList.remove('show');toast('Saldo actualizado');
+  }
+  $('save-bal').onclick=saveBal;
+  $('in-bal').addEventListener('keydown',function(e){if(e.key==='Enter')saveBal()});
   $('q').onclick=function(){toast('¿En qué te ayudamos?')};
   $('plata').onclick=function(){var m=money(BALANCE);toast('Disponible: $ '+m.i+','+m.d)};
   $('payb').onclick=function(){toast('Enviar plata')};
