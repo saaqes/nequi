@@ -121,7 +121,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #bans::-webkit-scrollbar{display:none}
 #bans>div{flex:none;position:relative;height:215px;scroll-snap-align:start;border-radius:10px;overflow:hidden}
 #bans img{position:static}
-#pg-bell{z-index:5}
+#pg-bell,#pg-info{z-index:5}
+.irow{left:29px;right:29px;height:88px}
+.irow .tt,.irow .ti{position:absolute;left:90px;top:27.2px;transform:translateY(-50%);font:500 22px/1 Manrope,sans-serif;color:var(--ink);white-space:nowrap}
+.irow .tt.g{color:#4c4c4c}
+.irow .ti{width:calc(100% - 170px);height:34px;background:none;border:0;outline:0;padding:0;border-radius:0}
+.irow .ti:focus{box-shadow:0 2px 0 #e0314b}
+.irow .ts{position:absolute;left:90px;top:57.6px;transform:translateY(-50%);font:400 19.3px/1 Manrope,sans-serif;color:#4c4c4c;white-space:nowrap}
+.irow .ck{right:29px;top:30.5px}
 .pg .field{position:absolute;left:28px;right:28px;height:60px;background:#fcf7fb;border:1.5px solid #e6dfe8;border-radius:8px}
 .pg .field input{position:absolute;left:20px;top:0;width:calc(100% - 40px);height:57px;background:none;border:0;outline:0;font:600 26px Manrope,sans-serif;color:var(--ink)}
 .pg .bigbtn{position:absolute;left:28px;right:28px;height:56px;border-radius:8px;font-size:19px;font-weight:600}
@@ -187,7 +194,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <!-- saludo -->
   <div class="a" style="left:22px;top:81px;width:55px;height:55px;background:var(--field);border-radius:5px"><svg class="a" style="left:13px;top:12px" width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="2"><circle cx="15" cy="9" r="5.5"/><path d="M4 28c0-6 5-9 11-9s11 3 11 9z"/></svg></div>
   <div class="t m" style="left:100px;top:93px;font-size:19px;font-weight:400">Hola,</div>
-  <div class="t m" style="left:100px;top:126px;font-size:24.8px;font-weight:400">Sebastian</div>
+  <div class="t m" id="hello-name" style="left:100px;top:126px;font-size:24.8px;font-weight:400">Sebastian</div>
+  <button class="a" id="profile" aria-label="Tu info" style="left:22px;top:81px;width:260px;height:62px"></button>
   <button class="a" id="bell" aria-label="Notificaciones" style="right:142px;top:88px;width:40px;height:40px"><svg class="a" style="left:5px;top:3px" width="30" height="34" viewBox="0 0 30 34" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"><path d="M5 25V15a10 10 0 0 1 20 0v10l3 3H2z"/><path d="M11.5 31a3.5 3.5 0 0 0 7 0"/></svg></button>
   <button class="a" id="q" aria-label="Ayuda" style="right:84px;top:88px;width:40px;height:40px"><span class="t c" style="left:20px;top:21px;font-size:36px;font-weight:500">?</span></button>
   <button class="a" id="lock" aria-label="Bloquear" style="right:29px;top:88px;width:40px;height:40px"><svg class="a" style="left:7px;top:4px" width="26" height="33" viewBox="0 0 26 33" fill="none" stroke="#fff" stroke-width="2.4"><rect x="2" y="14" width="22" height="16" rx="3"/><path d="M6 14V9a7 7 0 0 1 14 0v5"/></svg></button>
@@ -287,6 +295,54 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   </div>
   <button class="a pay" id="payb" aria-label="Enviar plata"><span class="t c" style="left:50%;top:50%;font-size:42px;font-weight:300">$</span></button>
 
+  <!-- ============ TU INFO (perfil) ============ -->
+  <div class="pg" id="pg-info">
+    <div class="in">
+    <button class="a" id="info-back" aria-label="Atrás" style="left:10px;top:70px;width:56px;height:50px"><svg class="a" style="left:7px;top:12px" width="30" height="26" viewBox="0 0 30 26" fill="none" stroke="#1f0020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M28 13H3M13 2L2 13l11 11"/></svg></button>
+    <div class="t m" style="left:22px;top:172px;font-size:33.2px;font-weight:700">Tu info</div>
+    <div class="card irow" style="top:221.6px">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAApCAYAAADAk4LOAAACjElEQVR42u2Xv2tUQRDHP/vuvYsxokcQxSoHgoXGlAoWgQhiYWNnoX+BiKXYi4WFnbUW2lgoFpoinQQhWNlYRBBFRAsDenq5H7nLW5vvhrn1cXe5C1Y38NjZndv57nz3x824OaoUiAO82hToAGVgS/1EOsCU7LmZfwBoyEc5iRyX1WLarvSO2m3pqfpbAnBApjmbGvNAOzUgYcUZMA+cBGYEgibE4F1Fsh/4A2wAb4BfJqK6BekCR4FbwE2gxGjyDrgBrAF1oFKqUAnGaeA+cF2cf1bYB2XPTRRW2sBP4BswCxwDzgOrwHegnRgKFoBr6t8WZccF6gWMAQyyAiwCp4ElYB2oAleD79Ss7oI2fg14DDRleySOzypaJ0Avh8vAB/lYBR4C94BzwCGgZvdkn9rfwA85SUXHC+CpAPIBe/JV7Uw4bam5D+H0ZMZRuAvNITfdGWYyoEXEMyM4KhIf7ZtP+A8yAZmATEAmIBOQf1/rnQxltxPjrMU+7xSkVD1/v0UTdr3qorFx6PIDFuT7gbgxQPdk4/2op8uPeYoG0dY3ErcH4EPR5fqcHDcspUmBnpmxzIw74BTwWmlsbA8JYkN6S/1SWoA+pYw+Vy2SmwLoBHAGqClD3NTcadm70oOfFrBtb3zIFmty7g0loQB6CVxUBt9QXdLUVxJIGkVSt6F+lONF0UJUoyQCfwt8Mulrqi8HDgOXZHuv3/e8XSsyzANPlM1vaLVtTUhMIu7MWG4qgyvSl1W3eDdH1Zn64zJwR6XcqNIEHgB3VSH0ROKAV8AXFT4LwBEtoGMo64hGu7gQyTrwDHgugDSOxJ79wH/RcXfmliemyo2lLJp36pP4eSgqdPKCS9evIGoH5S+KQ6u0SUgNmAAAAABJRU5ErkJggg==" style="left:40.0px;top:28.0px;width:20.0px;height:32.8px" alt="">
+      <input class="ti" id="in-phone" type="text" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="ts">Este es tu # de tu dispositivo</div>
+      <svg class="a ck" width="27" height="27" viewBox="0 0 27 27"><circle cx="13.5" cy="13.5" r="13.5" fill="#19d67f"/><path d="M7.5 14l4 4 8-8.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="card irow" style="top:322.4px">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAhCAYAAAC1ONkWAAAFbUlEQVR42q2YaYhVZRjHf++5525mNdWoY0zOUEaUVhD0oVXqQyCVCUH7RC60aaUUVE5RQcsHW7RsyJg2CjKdTGrIdkgTsy99qEFaLKuxhmixbLY7557Tl/8rz5zOvVdsDhzuve/6f5/n//yf572ujXYm4MkBsb6HQACM6rerM8+ZeeOe4AA3DTIWdGYNu/iYQDmgBCQZc3P6TGptGh4AsFgLJXqd5iVAVWNmAnPUvgX4SvNGMwAk6gv0Vg8WWAJEQF4AR/W7BEwHVgAXAa0a/zvwCrAG2JWyqLd81Rw428cHwTEHnAzcAFwDHAYMAsPAZAEGGAB6gSeAH4AhY7mgFrf286eJpkYg8saFpwD3AKuBs4EisAd4XkBXi2MnAFOB04AOfe8HfjXcdPU47i2W18CxDNOHwInAIuAq4Ej1fQ+8ITADmuvntAILBLZF7UNAD/A48EUKoOUdQNW10V4wi+YMGScDM4DbgXnAUWr/BlgHvCwO2ZDPAxXz/Rgd6DIFSAz8A7wJPCaA/pmkvgQouzbafZQ5kRq5aTkwV+5CkdYNbAB+MpKRGO4kGVHoZLXFAjlD7XuBD4Eu4GPNCf3BXBvtOVkqApoVZR3GZT8CK4FNwG+a6IACMGIiK06BizPEdzpwLbAQOF5tfwDPao+9/qCe/H6xu4ElirQvxYcbga3APrOx50SSEV1p7nhgTpG7DXhdstICtMlDEfCRP4yNipkCNUm/PwfWAn8b10QZFrLuTFKutZy17QPADq3n2xYDx3nyByaSpgGHG6AdwEYBPtS0R4ZfQQpMYEQ7Fii/cdHwaKlE+FQjuNOAY9O5Mpb7vM83SDTPA94GLtFYm47SSdvzKkppIBLdCjBFXFolN34N3Ko+e4hxrhwxIDuBm4FvxYEn9TZrgaI2rpoFXSrFherz+ngm8Bpwi/o3ARcDbxmKOOtKl7JeSdGxTu7slYtvAl4EzjBC7ICyXOBT1BT1ef4UJbablegrwEPA5UpV1Cp7vPmsMJa1+Q7gauAZbTQXWA9caPi0CNguPepW/0mywNES0lXi6XcC9ICsWWlU9gSGDyOymq+b9gG3STJWALMUFF2yxvWaN6jDzAHeA54DTgcuUP9m4A5ljrFGRWRoBhRMhAybcse39QC7gXuBcw1XEunPUqn6qyJ2pywyKIs/LIpY3SvUc6XfeNS4Mp8hA5Fc2ytX++dBYL4ssRU4B3jfbPwn8IJR9bzhZ6UesHyGSUO9tgRuMqHuJCtLgPuUfGPRYKfEskdtreLdWaJIlBLgmsDGjKW8gEamykyAdlWkywX4E2ncWl8NmAM1qfa6QpITKRjeAa5TZglq8MvLjksrNUaP/CVknk5/pfq7gEuBPmPREXOov8ym3QqGPgF6WnrYYjxRNGlrf7kdmALNW64s3ydK4BuVOvqBZcBdSsBZedAmeP9u151gvfZYKJ7OMjKVGE7GQGCr1aIZWJVr5wvAToF8SlGWGK4kGe6wb0HRvAB4RGNmA+eb/nKKc3FoorKUukdWJIQfKHfuTk2ummTuagD0VvARfz/wqbLHSxozqP6SzZehWWTYdDSrQNwmV8QmS8SpUnqszkUGCXRg8uG7egOTHQra24+thua0fcDPqtOXifC7jJxYogdarHIAd9OSLiKjclnOZJcScKfa+4FfPG99ae0DoVNpJ29KmLyuXc1m0Zws5S8ySR1gnq8lgfO8HgKOMJfkNUrukb9X2uv/Fm08W/VZVRY5xGQJLyXejXkjyFlvSeNCo5FlBduIMsJK4FEzrupvSfbJq3SZasA1+gvh/zyfpS4yCZCEGRtUdLve0+gfmQl47G18nPSE5ofLAJk0+H9rop7//I/xL6CQuRo5eKxPAAAAAElFTkSuQmCC" style="left:35.2px;top:31.2px;width:30.4px;height:26.4px" alt="">
+      <input class="ti" id="in-mail" type="email" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="ts">Este es tu correo registrado</div>
+      <svg class="a ck" width="27" height="27" viewBox="0 0 27 27"><circle cx="13.5" cy="13.5" r="13.5" fill="#19d67f"/><path d="M7.5 14l4 4 8-8.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="card irow" style="top:423.2px">
+      <img src="data:image/png;base64,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" style="left:33.6px;top:26.4px;width:32.8px;height:33.6px" alt="">
+      <input class="ti" id="in-name" type="text" autocomplete="off" autocapitalize="words" spellcheck="false">
+      <div class="ts">TI 1090274993</div>
+      <svg class="a ck" width="27" height="27" viewBox="0 0 27 27"><circle cx="13.5" cy="13.5" r="13.5" fill="#19d67f"/><path d="M7.5 14l4 4 8-8.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="card irow" style="top:524.0px">
+      <img src="data:image/png;base64,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" style="left:32.0px;top:26.4px;width:36.8px;height:35.2px" alt="">
+      <div class="tt">¿Dónde vives?</div>
+      <div class="ts">Info de tu ubicación</div>
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAgCAYAAAASYli2AAACxUlEQVR42oWWuWsVURjFfzPzsryYSBREXHCPKEEMCtoIYmWjhYUbbhGE+A9Y+T9YGNQmhb2liCk0JKQwFoqo2AZBRRBcCL5nlnljc0ZPvszTC8Pcufe7555vuedOspVtqKV6EqAF5PxtKVCoX9h4Yv2iNPTJJAD7WBXIiuaGG4CHwCwwBvQZwFLYJDXgzAFr1r8IHFf/sgyvAz+BHqCpMXe9ZpvlkWFsF4BbwFqgAXRpUWHPkkD/xDvrp7/svwWOAFuABbE5qFBMiGkZgsISVbSL4Q/gJPAG6LTxM8Ao0GsV0Kd3zPoyhgDzwAPgKLDZ4rwf2ARMymY+xLMSsK5dGwI9DGw32yFgh9xfMLaJl5IDlhnL9H4sZjsNdFBMJ7RxHVhsB5gDHTKoA9+0cBDYZWz2CfQZ8B1YbYyTGMNCCZnX9xwwDewBBsSqJvfXAePKfpn5FUlB7pbAuUAnBbLb3BtS4iaMwDLAzEqhrPzUmI6HmLb0fUhzjQiYhGPlItAp0EfAXmCjxlJlvgY8AdLE5CuCJpb9RRV2UwxngDW27iuwPp6UrEKaCst6Q/M3gG47CABT5TF0tWmZFKV24GvAL5XUfeC82XcBT4GbpWe1IK4d2jU3V8uFY8DpoAPjwDDwpUxodDnKfiL3RiVn7tFzYERgWZXAFqZ3mZiuAu5IcL29Bk4Bn6PiOGBu7udycxS4YvMJ8M7AEtk1ox6Wct5tDO8BVw0sA14BJ3TvlJs32wnsktzslZvDIb7TEtv3Vq95LLVaiE03cFsXVmK19hK4ZGAdVoOZEVrGsAe4K2aZuTIFnAM+WPE7s7QEiwzPKgEtGdWBF8A14GO4kAqr3UU/sqkFdyDEdUa196nidivCma9U7DngmGpvRm7OWgW0Qrwrf0lcbbr0HFASGuHkFP8BLCJgWyO7wCpJtfv7wu5aF9j6P8BWtN+FOsQlpW4GFAAAAABJRU5ErkJggg==" style="left:481.6px;top:31.2px;width:16.0px;height:25.6px" alt="">
+    </div>
+    <div class="card irow" style="top:624.8px">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAmCAYAAAC/H3lnAAAFJ0lEQVR42sWZS4gcVRSGv6qu7nlkxjgTIz6TMaArweAbXEkEF+ITzEbwheAquBLUlSIKLkQkS1FEcKV7Fy4UslF0FUURxfiKTkZmNMm8uqury81/wz/XqurumWguFPXoqnPPPec//znndrKfBSpGogM7D4CS+pEBfXu/briMVHIBOkBv2PfZCELLaCHhu1S/TQGbQAFMMHz09M2Gvp8Ech0MMUqtwv5hYvcJMAM8CjwAXKznBTANdIco2wFWgePAUeAHLcA91KhwUgOJOpjsBV4BnmLn4yfgIeAbKYrBo9bS2RjKJsAh4Ak9+wpYFhwSWXhzBPzOArcCC8DzwOPyUFkx578Uz6IXMmEpiSDR0fM7gRawBDwi66Bn/YrJqhTuAO8BDwP3CWLLUQBicj3YyzSaILcXkwq22CsBP0eMUOpIdSQVR3ieA79JTguYj1gjs+tg+XaM4bZZdgK4F7gFuEa/LQO7gduBKyXkc4vu1KzRhMG2vHMzcLWefajFT9pc3wLvA4uR58o46K4DXgAe4/8ZZQN8vgde0oJ6MkjhCs8CHwB36/40cEoCA8emxsGFBM1G2G8aRQSTdZ27suSU5Fyr95eBw8AnAeMedIdM2Y+AV4EvgDkJ7EqxWblvEljTJD0xRGcEq2YWL6f1zaYU6gFXAA8CrwF7gGeAYwEambHDPRJ0CngO+FouWwzu0O9nLTCLbUJhSgYYWEoOgf0j8Dpwk6x7ELhMgXouvfaFX/TDCVMquDK1wCktgjsRUzQd4b11W2zXmKC0Ob/TeZ8CPXVa8yyTGQ8XkZsnLGoD9fUs7Y4y2kZTrmAvotZwH9L1wJXzRNGPojc3T7jrCltEbl4oGzJlaQrFcoj4ODV9+k2puSsLJJFluzap37ckvFvDEs4KhSWQCd3nFdkxVHBrpksKFFkF0e8DXpQLpowdck3SM0hMKLksAX8Au8x9pSWUtmW1RWDFStNM7xdWAqTADZK3pW6usvBVwJEK/mxxYUbPU3Ndtfa7at2O3LEiTtw0WKwrXbcltFPRmSSGRYw2ZwxGwXvTBrdV3bc84KqqNVRc3w/8aZkpsEAmYYUI/k0V8p0oYOrGmsrTYxZIc5IZoDCt508DzxrmMyCvsvAM8KsxxUBWPGOKF8Li4pjuXZFBNizDLWmOgNMNY4ndWtgZz3RE/HdWCoZM5FyLlYU94GXgS1VfmRQoK6I+XB8F/jLFMForonI2j+arxXDSUB46nSXC+tvAuyP0hoEV1qPE454sRy1E6nizjM7ehrcqrMOQeng9mqOo6crH7pqThnPL0jaWOPKGbQGiVJxYx5KM0t43KRwXKnHLX0SdRb9h0rJiwWnkkbQhRVfm7GHdMlHAlQ17DqN2GWVFD8d2LTzMPe0oionwXY4hL1i2GNIubVG4HENZIopLavbJmsbAlOvbIodVelsgUUYW7EUeSGrad1/kYMTAGdTExyBq8RMzUMiC5xTOVNKF9DlvAUWDq8/nSKItqwC9XcBFIYn5RspJXR+wXci2LSoZQncj8egIEA218qV6tqi6JnML58DHut6jPa/rjWoy49z/6gh0NwfcBTypOU+owuuHnZ/g7suBT9WM9oFflHpXrdksazLg+TxPAXeY1Q9rM6UN5Ml+Fjy6b1RtcJALP04C7wBvAH/HW1Utyz6XyB23yertaCdxmIXYgYVDHBwH3gI+s9IzDRamYiMvWH1eJWN/jEjficKDqCkNzwPVlllUkxLdL++AorZj3aoENvC/Iv4BcXS8vx2Is7MAAAAASUVORK5CYII=" style="left:32.8px;top:30.4px;width:35.2px;height:30.4px" alt="">
+      <div class="tt g">¿A qué te dedicas?</div>
+      <div class="ts">Info sobre lo que haces</div>
+    </div>
+    <div class="card irow" style="top:724.8px">
+      <img src="data:image/png;base64,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" style="left:34.4px;top:31.2px;width:32.0px;height:26.4px" alt="">
+      <div class="tt g">Tu plata</div>
+      <div class="ts">¿Cómo la usas?</div>
+    </div>
+    <div class="card irow" style="top:825.6px">
+      <img src="data:image/png;base64,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" style="left:35.2px;top:25.6px;width:30.4px;height:36.8px" alt="">
+      <div class="tt g">Residencia fiscal</div>
+      <div class="ts">Completa tu info fiscal</div>
+    </div>
+    <button class="bigbtn" id="info-save" style="top:945px;left:29px;right:29px;background:#e0314b;color:#fff">Guardar</button>
+    </div>
+  </div>
+
   <!-- ============ CAMPANITA: notificaciones + editar saldo ============ -->
   <div class="pg" id="pg-bell">
     <div class="in">
@@ -310,6 +366,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <script>
 (function(){
   var $=function(i){return document.getElementById(i)};
+  /* ---- Perfil (Tu info): se guarda en el navegador ---- */
+  var PROFILE={phone:'3166219962',email:'jramirezceballos27@gmail.com',name:'Juan Sebastian Ramirez Ceballos'};
+  try{var sp=JSON.parse(localStorage.getItem('nequi_profile')||'null');if(sp&&sp.phone&&sp.email&&sp.name)PROFILE=sp}catch(e){}
+  function nameParts(n){
+    var w=n.trim().split(/\s+/).filter(Boolean),f=w[0]||'',sec='',ap='';
+    if(w.length>=4){sec=w[1];ap=w[2]}else if(w.length>=2){ap=w[1]}
+    return {first:f,second:sec,ap:ap};
+  }
+  function shortName(n){var p=nameParts(n);return (p.first+' '+p.ap).trim().toUpperCase()}
+  function helloName(n){var p=nameParts(n),h=p.second||p.first;return h?h.charAt(0).toUpperCase()+h.slice(1):''}
+  function fmtPhone(d){d=d.replace(/\D/g,'').slice(0,10);return (d.slice(0,3)+' '+d.slice(3,6)+' '+d.slice(6)).trim()}
+  function applyProfile(){$('hello-name').textContent=helloName(PROFILE.name);$('tel').value=fmtPhone(PROFILE.phone)}
   var BALANCE=0;
   try{var sv=parseFloat(localStorage.getItem('nequi_balance'));if(isFinite(sv)&&sv>=0)BALANCE=sv}catch(e){}
   var PIN=null;                 // "1234" para exigir una clave; null acepta cualquiera
@@ -463,6 +531,30 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   $('pg-serv').addEventListener('click',function(e){var b=e.target.closest('[data-t]');if(b)toast(b.dataset.t)});
   document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){setTab(b.dataset.tab)}});
   renderBal();
+
+  /* ---- Pantalla Tu info ---- */
+  var draftName=PROFILE.name;
+  function openInfo(){
+    draftName=PROFILE.name;
+    $('in-phone').value=PROFILE.phone;$('in-mail').value=PROFILE.email;$('in-name').value=shortName(draftName);
+    $('pg-info').classList.add('show');
+  }
+  $('profile').onclick=openInfo;
+  $('info-back').onclick=function(){$('pg-info').classList.remove('show')};
+  $('in-name').addEventListener('focus',function(){this.value=draftName});
+  $('in-name').addEventListener('input',function(){draftName=this.value});
+  $('in-name').addEventListener('blur',function(){this.value=shortName(draftName)});
+  $('in-phone').addEventListener('input',function(){this.value=this.value.replace(/\D/g,'').slice(0,10)});
+  $('info-save').onclick=function(){
+    var ph=$('in-phone').value.replace(/\D/g,''),em=$('in-mail').value.trim(),nm=draftName.trim().replace(/\s+/g,' ');
+    if(ph.length!==10){toast('El celular debe tener 10 dígitos');return}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){toast('Escribe un correo válido');return}
+    if(nm.split(' ').length<2){toast('Escribe tu nombre completo');return}
+    PROFILE={phone:ph,email:em,name:nm};
+    try{localStorage.setItem('nequi_profile',JSON.stringify(PROFILE))}catch(e){}
+    applyProfile();$('pg-info').classList.remove('show');toast('Datos guardados');
+  };
+  applyProfile();
 })();
 </script>
 </body>
