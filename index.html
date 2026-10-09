@@ -331,7 +331,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
      El contenido se estira a lo ancho (hasta 1200 px de diseño) y los bloques inferiores quedan anclados abajo. */
   function fit(){
     var vv=window.visualViewport,vw=innerWidth,fh=Math.round(vv?Math.min(vv.height,innerHeight):innerHeight),MAXW=1200,MINH=1000;
-    var cs=getComputedStyle(document.getElementById('probe')),sat=parseFloat(cs.paddingTop)||0,sab=parseFloat(cs.paddingBottom)||0,vh=Math.max(fh-sat-sab,300);
+    var cs=getComputedStyle(document.getElementById('probe')),sat=parseFloat(cs.paddingTop)||0,sab=parseFloat(cs.paddingBottom)||0,vh=Math.max(fh-sat,300);   /* abajo no se reserva espacio: el contenido llega hasta el borde */
     document.querySelectorAll('.screen').forEach(function(sc){sc.style.height=fh+'px';sc.style.bottom='auto'});
     document.querySelectorAll('.stage').forEach(function(st){
       var B=st.classList.contains('w618')?618:592;
