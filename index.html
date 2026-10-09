@@ -17,14 +17,15 @@
    (618x1280 para logo y clave, 592x1280 para saldo) y se escalan juntas. */
 :root{--bg:#1f0020;--pink:#d5007e;--field:#4d334c;--lilac:#ebe7f6;--ink:#1f0020}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%;height:100%;overflow:hidden;font-family:Manrope,system-ui,sans-serif;color:#fff;background:var(--bg)}
-body.home{background:var(--bg)}
+html,body{min-height:-webkit-fill-available;-webkit-text-size-adjust:100%;text-size-adjust:100%;height:100%;overflow:hidden;font-family:Manrope,system-ui,sans-serif;color:#fff;background:var(--bg)}
+body.home{background:linear-gradient(var(--bg) 0 50%,#fff 50%)}
+body.home.wp{background:#fff}
 /* Zonas seguras (hora / barra inferior): toman el color del contenido de al lado */
 #s-home{background:linear-gradient(var(--bg) 0 50%,#fff 50%)}   /* arriba morado (cabecera), abajo blanco (sin franja morada) */
 #s-home.wp{background:#fff}   /* Movimientos / Servicios / Notificaciones: arriba también blanco */
 #probe{position:fixed;left:0;top:0;visibility:hidden;pointer-events:none;padding-top:var(--sat-override,env(safe-area-inset-top,0px));padding-bottom:var(--sab-override,env(safe-area-inset-bottom,0px))}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-.screen{position:fixed;inset:0;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+.screen{position:fixed;left:0;top:0;right:0;bottom:0;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
 .screen.active{opacity:1;visibility:visible}
 .stage{position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden;background:var(--bg)}
 .w618{width:618px}.w592{width:592px}
@@ -331,8 +332,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
      El contenido se estira a lo ancho (hasta 1200 px de diseño) y los bloques inferiores quedan anclados abajo. */
   function fit(){
     var vv=window.visualViewport,vw=innerWidth,fh=Math.round(vv?Math.min(vv.height,innerHeight):innerHeight),MAXW=1200,MINH=1000;
+    /* iPhone instalado (PWA): innerHeight no incluye la zona inferior; se usa el alto real de la pantalla para que no quede franja */
+    if(navigator.standalone===true&&innerHeight>innerWidth)fh=Math.max(fh,Math.round(Math.max(screen.height,screen.width)));
     var cs=getComputedStyle(document.getElementById('probe')),sat=parseFloat(cs.paddingTop)||0,sab=parseFloat(cs.paddingBottom)||0,vh=Math.max(fh-sat,300);   /* abajo no se reserva espacio: el contenido llega hasta el borde */
-    document.querySelectorAll('.screen').forEach(function(sc){sc.style.height=fh+'px';sc.style.bottom='auto'});
+    document.querySelectorAll('.screen').forEach(function(sc){sc.style.height='';sc.style.bottom='0'});
     document.querySelectorAll('.stage').forEach(function(st){
       var B=st.classList.contains('w618')?618:592;
       var s=Math.min(vw<=500?vw/B:2/3,vh/MINH),W=Math.min(vw/s,MAXW),H=vh/s;
@@ -355,7 +358,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   /* Color de las zonas fuera de límites (hora / barra inferior): morado, salvo páginas totalmente blancas */
   function updateSafe(){
     var wp=['pg-mov','pg-serv','pg-bell'].some(function(i){return document.getElementById(i).classList.contains('show')});
-    document.getElementById('s-home').classList.toggle('wp',wp);
+    document.getElementById('s-home').classList.toggle('wp',wp);document.body.classList.toggle('wp',wp);
     var white=current==='s-video'||(current==='s-home'&&wp),tc=document.getElementById('themecolor');
     if(tc)tc.setAttribute('content',white?'#ffffff':'#1f0020');
   }
