@@ -172,9 +172,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .pay{transition:background .08s}
 .pay.x{background:#ebe6f6;z-index:8}
 .pay .xi{opacity:0;transform:rotate(-90deg) scale(.5);transition:none}.pay.x .xi{opacity:1;transform:none;transition:transform .14s .1s,opacity .08s .1s}.pay.x .dl{opacity:0}
-#menu{position:absolute;left:0;top:0;width:100%;height:100%;z-index:6;background:rgba(255,255,255,.88);opacity:0;visibility:hidden;transition:opacity .1s,visibility .1s}
-#menu.show{opacity:1;visibility:visible;transition-delay:.07s}
-.mi{position:absolute;right:calc(50% - 276px);height:56px;display:flex;align-items:center;gap:18px;opacity:0;transition:opacity .1s}
+#menu{position:absolute;left:0;top:0;width:100%;height:100%;z-index:6;background:rgba(255,255,255,.88);visibility:hidden;clip-path:inset(100% 0 0 0);transition:clip-path .12s ease-in,visibility 0s .12s}
+#menu.show{visibility:visible;clip-path:inset(0 0 0 0);transition:clip-path .17s cubic-bezier(.25,.6,.35,1),visibility 0s}
+.mi{position:absolute;right:calc(50% - 276px);height:56px;display:flex;align-items:center;gap:18px;opacity:0;transition:opacity .07s}
 #menu.show .mi{opacity:1}
 #menu:not(.show) .mi{transition-delay:0s !important}
 .mi span{font-size:22px;font-weight:500;color:var(--ink);white-space:nowrap}
@@ -438,12 +438,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
   <!-- ============ ENVIAR PLATA ============ -->
   <div id="menu">
-    <div class="mi" style="bottom:132px;transition-delay:0s" data-m="recarga"><span>Recarga Nequi</span><i><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 22V4M5 12l8-8 8 8"/></svg></i></div>
-    <div class="mi" style="bottom:224px;transition-delay:.04s" data-m="qr"><span>Código QR</span><i><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="9" height="9" rx="1"/><rect x="16" y="3" width="9" height="9" rx="1"/><rect x="3" y="16" width="9" height="9" rx="1"/><path d="M16 16h3v3M25 16v3M16 22v3h3M22 22h3v3" stroke-linecap="round"/></svg></i></div>
-    <div class="mi" style="bottom:316px;transition-delay:.08s" data-m="envia"><span>Envía</span><i><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h18M14 5l8 8-8 8"/></svg></i></div>
-    <div class="mi" style="bottom:408px;transition-delay:.12s" data-m="pide"><span>Pide</span><i><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 13H4M12 5l-8 8 8 8"/></svg></i></div>
-    <div class="mi" style="bottom:500px;transition-delay:.16s" data-m="saca"><span>Saca</span><i><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4v18M5 14l8 8 8-8"/></svg></i></div>
-    <div class="mi" style="bottom:592px;transition-delay:.2s" data-m="serv"><span>+ Servicios</span><i class="bl"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="2"><rect x="3.5" y="3.5" width="8.5" height="8.5" rx="1.6"/><rect x="16" y="3.5" width="8.5" height="8.5" rx="1.6"/><rect x="3.5" y="16" width="8.5" height="8.5" rx="1.6"/><rect x="16" y="16" width="8.5" height="8.5" rx="1.6"/></svg></i></div>
+    <div class="mi" style="bottom:132px;transition-delay:.03s" data-m="recarga"><span>Recarga Nequi</span><i><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 22V4M5 12l8-8 8 8"/></svg></i></div>
+    <div class="mi" style="bottom:224px;transition-delay:.05s" data-m="qr"><span>Código QR</span><i><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="9" height="9" rx="1"/><rect x="16" y="3" width="9" height="9" rx="1"/><rect x="3" y="16" width="9" height="9" rx="1"/><path d="M16 16h3v3M25 16v3M16 22v3h3M22 22h3v3" stroke-linecap="round"/></svg></i></div>
+    <div class="mi" style="bottom:316px;transition-delay:.07s" data-m="envia"><span>Envía</span><i><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h18M14 5l8 8-8 8"/></svg></i></div>
+    <div class="mi" style="bottom:408px;transition-delay:.09s" data-m="pide"><span>Pide</span><i><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 13H4M12 5l-8 8 8 8"/></svg></i></div>
+    <div class="mi" style="bottom:500px;transition-delay:.11s" data-m="saca"><span>Saca</span><i><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4v18M5 14l8 8 8-8"/></svg></i></div>
+    <div class="mi" style="bottom:592px;transition-delay:.13s" data-m="serv"><span>+ Servicios</span><i class="bl"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="2"><rect x="3.5" y="3.5" width="8.5" height="8.5" rx="1.6"/><rect x="16" y="3.5" width="8.5" height="8.5" rx="1.6"/><rect x="3.5" y="16" width="8.5" height="8.5" rx="1.6"/><rect x="16" y="16" width="8.5" height="8.5" rx="1.6"/></svg></i></div>
   </div>
 
   <!-- Opciones para enviar -->
