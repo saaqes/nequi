@@ -2703,6 +2703,13 @@ return qrcode;
     $('pg-medit').querySelector('.cc').scrollTop=0;openFP('pg-medit');
   }
   $('me-phone').addEventListener('input',function(){this.value=fmtPhone(this.value)});
+  /* Recibido suma al saldo, envío/pago lo descuenta (dir=-1 revierte el efecto) */
+  function applyBal(m,dir){
+    var d=(m.type==='in'?1:-1)*m.amount*dir;
+    BALANCE=Math.max(0,Math.round((BALANCE+d)*100)/100);
+    try{localStorage.setItem('nequi_balance',String(BALANCE))}catch(e){}
+    renderBal();
+  }
   function saveEditor(){
     var name=$('me-name').value.trim().replace(/\s+/g,' '),amt=parseMoney($('me-amt').value);
     if(!name){toast('Escribe el nombre que se muestra');return null}
@@ -2710,12 +2717,13 @@ return qrcode;
     var ts=new Date($('me-date').value).getTime();if(!isFinite(ts))ts=Date.now();
     var ref=$('me-ref').value.trim().toUpperCase()||newRef();
     var o={name:name,sub:$('me-sub').value.trim()||(ETYPE==='in'?'De':'Envío'),amount:amt,type:ETYPE,phone:digits($('me-phone').value),ts:ts,ref:ref};
-    if(EDIT){Object.assign(EDIT,o);o=EDIT}else{o.id='m'+Date.now();MOVL.unshift(o);EDIT=o}
+    if(EDIT){applyBal(EDIT,-1);Object.assign(EDIT,o);o=EDIT}else{o.id='m'+Date.now();MOVL.unshift(o);EDIT=o}
+    applyBal(o,1);
     saveMovs();renderMovs();renderMgr();return o;
   }
   $('me-save').onclick=function(){if(saveEditor())closeFP('pg-medit')};
   $('me-view').onclick=function(){var o=saveEditor();if(o)showRcpt(o,true)};
-  $('me-del').onclick=function(){if(!EDIT)return;MOVL=MOVL.filter(function(m){return m!==EDIT});saveMovs();renderMovs();renderMgr();closeFP('pg-medit')};
+  $('me-del').onclick=function(){if(!EDIT)return;applyBal(EDIT,-1);MOVL=MOVL.filter(function(m){return m!==EDIT});saveMovs();renderMovs();renderMgr();closeFP('pg-medit')};
   renderMovs();
   $('r-send').onclick=function(){
     if(!SEND)return;
