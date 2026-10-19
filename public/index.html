@@ -2890,12 +2890,14 @@ window.__startApp=function(){
   /* arranque: ¿ya hay sesión en este dispositivo? */
   TOKEN=lget('nq_token');
   var cached=null;try{cached=JSON.parse(lget('nq_user')||'null')}catch(e){}
-  if(!TOKEN){showGate()}
-  else api('GET','/api/me').then(function(me){
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+  // aunque no haya token guardado, la cookie de sesión (si existe) devuelve la sesión
+  api('GET','/api/me').then(function(me){
     if(me.role==='admin'){lset('nq_user',JSON.stringify({role:'admin'}));openAdmin()}
     else{lset('nq_user',JSON.stringify({role:'user',name:me.name,phone:me.phone}));boot(me)}
   },function(e){
     if(e.status===401){TOKEN=null;ldel('nq_token');ldel('nq_user');showGate()}
+    else if(!TOKEN&&!(cached&&cached.role==='user'))showGate();
     else if(cached&&cached.role==='user')boot(cached);          // sin conexión: la sesión guardada sigue valiendo
     else if(cached&&cached.role==='admin')showGate('Sin conexión con el servidor.');
     else showGate('Sin conexión con el servidor.');

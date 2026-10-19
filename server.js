@@ -93,10 +93,21 @@ const wrap = (fn) => (req, res) => fn(req, res).catch((e) => {
   res.status(500).json({ error: 'Error del servidor' });
 });
 
-async function auth(req) {
+// el token viaja en la cabecera Authorization o en la cookie «nq» (respaldo si el navegador borra el localStorage)
+function tokenOf(req) {
   const m = /^Bearer ([0-9a-f]{64})$/.exec(req.get('authorization') || '');
-  if (!m) return null;
-  const r = await q('SELECT role, name, phone, created_at FROM sessions WHERE token_hash=$1', [sha(m[1])]);
+  if (m) return m[1];
+  const c = /(?:^|;\s*)nq=([0-9a-f]{64})(?:;|$)/.exec(req.get('cookie') || '');
+  return c ? c[1] : null;
+}
+function setCookie(req, res, token, days) {
+  res.set('Set-Cookie', `nq=${token}; Max-Age=${days * 86400}; Path=/; HttpOnly; SameSite=Lax${req.secure ? '; Secure' : ''}`);
+}
+
+async function auth(req) {
+  const t = tokenOf(req);
+  if (!t) return null;
+  const r = await q('SELECT role, name, phone, created_at FROM sessions WHERE token_hash=$1', [sha(t)]);
   const s = r.rows[0];
   if (!s) return null;
   if (s.role === 'admin' && Date.now() - new Date(s.created_at).getTime() > 30 * 864e5) return null;
@@ -114,7 +125,9 @@ app.post('/api/redeem', wrap(async (req, res) => {
   if (blocked(ip)) return res.status(429).json({ error: 'Demasiados intentos. Espera unos minutos.' });
   const code = String((req.body && req.body.code) || '').replace(/\D/g, '');
   if (isAdminKey(code)) {
-    return res.json({ role: 'admin', token: await newSession('admin', null) });
+    const token = await newSession('admin', null);
+    setCookie(req, res, token, 30);
+    return res.json({ role: 'admin', token });
   }
   if (!/^\d{6}$/.test(code)) { fail(ip); return res.status(400).json({ error: 'Escribe el código de 6 dígitos' }); }
   // borrado atómico: el código sirve una sola vez
@@ -124,6 +137,7 @@ app.post('/api/redeem', wrap(async (req, res) => {
   const person = p.rows[0];
   if (!person) { fail(ip); return res.status(401).json({ error: 'Código incorrecto o ya usado' }); }
   const token = await newSession('user', person);
+  setCookie(req, res, token, 3650);
   res.json({ role: 'user', token, name: person.name, phone: person.phone });
 }));
 
@@ -134,8 +148,9 @@ app.get('/api/me', wrap(async (req, res) => {
 }));
 
 app.post('/api/logout', wrap(async (req, res) => {
-  const m = /^Bearer ([0-9a-f]{64})$/.exec(req.get('authorization') || '');
-  if (m) await q('DELETE FROM sessions WHERE token_hash=$1', [sha(m[1])]);
+  const t = tokenOf(req);
+  if (t) await q('DELETE FROM sessions WHERE token_hash=$1', [sha(t)]);
+  res.set('Set-Cookie', 'nq=; Max-Age=0; Path=/');
   res.json({ ok: true });
 }));
 
